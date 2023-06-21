@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-
+import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import * as Sqlite from 'expo-sqlite';
+import { useState, UseEffect } from 'react';
 export default function App() {
   return (
     <View style={styles.container}>

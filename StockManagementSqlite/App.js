@@ -8,14 +8,10 @@ import DashBoard from "./screens/DashBoard";
 import ForgortPassWordScreen from "./screens/ForgorPassWordScreen";
 const Stack = createNativeStackNavigator();
 import { Provider } from 'react-redux';
-
+import Store from './store/configStore'
 
 //import { StatusBar } from 'expo-status-bar'; 
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
-import * as Sqlite from 'expo-sqlite';
-import { useState, UseEffect } from 'react';
-
-
 
 const App = () => {
   return (

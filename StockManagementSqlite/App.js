@@ -4,11 +4,16 @@ import * as Sqlite from 'expo-sqlite';
 import { useState, UseEffect } from 'react';
 export default function App() {
   return (
-    
+
     <View style={styles.container}>
-      <Text>Bienvenue dans {}</Text>
+      <Text>Bienvenue {}</Text>
+      <Text>Cliquez pour vous connectez</Text>
+      <Button onPress={()=> navigate('LoginScreen')}
+      title='Connexion'></Button>
+
       <StatusBar style="auto" />
     </View>
+    
 
   );
 }

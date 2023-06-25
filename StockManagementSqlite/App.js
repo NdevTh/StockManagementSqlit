@@ -4,10 +4,12 @@ import * as Sqlite from 'expo-sqlite';
 import { useState, UseEffect } from 'react';
 export default function App() {
   return (
+    
     <View style={styles.container}>
-      <Text>Bienvenue sur mon app de gestion</Text>
+      <Text>Bienvenue dans {}</Text>
       <StatusBar style="auto" />
     </View>
+
   );
 }
 

@@ -1,1 +1,1 @@
-import { Text } from "react-native/types";
+import { Text } from "react-native/types"

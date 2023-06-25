@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-navigation/native": "^6.1.7",
     "expo": "~48.0.18",
     "expo-camera": "~13.2.1",
     "expo-sqlite": "~11.1.1",

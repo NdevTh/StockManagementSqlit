@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 import { Provider } from 'react-redux';
 
 
-import { StatusBar } from 'expo-status-bar';
+//import { StatusBar } from 'expo-status-bar'; 
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import * as Sqlite from 'expo-sqlite';
 import { useState, UseEffect } from 'react';
@@ -23,7 +23,7 @@ const App = () => {
           <NavigationContainer>
               <Stack.Navigator>
                   <Stack.Screen
-                      name="Homescreen"
+                      name="HomePage"
                       component={HomePage}
                   />
                   <Stack.Screen name="Loginscreen" component={LoginScreen} />

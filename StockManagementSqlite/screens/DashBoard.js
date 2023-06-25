@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Button} from 'react-native';
-import { Camera } from 'expo-camera';
+import CameraScreen from './CameraScreen'
 import Header from '../components/Header';
 import Paragraph from '../components/Paragraph';
 
@@ -10,12 +10,15 @@ export default class Dashboard extends React.Component{
         console.log(this.props)
             return (
                 <View>
-                    <Header title="Vous etes connecté"/>
+                    <Header title="Vous êtes connecté"/>
                     <Paragraph>
                         Bienvenu {this.props.route.params.username}
                     </Paragraph>
                     <Paragraph>commencer à prendre une photo</Paragraph>
-                    <Button onPress={() => this.props.navigation.navigate('Homescreen')} title="Déconnexion"/>
+                    <View style={styles.container}>
+                        <CameraScreen/>
+                    </View>
+                    <Button onPress={() => this.props.navigation.navigate('HomePage')} title="Déconnexion"/>
                 </View>
             );
     }

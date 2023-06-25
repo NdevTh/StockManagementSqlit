@@ -60,15 +60,20 @@ class LoginScreen extends React.Component {
         const {navigate} = this.props.navigation;
         return (
             <View>
+                
                 <Header title="Connexion"/>
 
                 <InputText
+        
                     value={this.state.email}
                     toto={text => this.setState({ email: text })}
                 />
-                <View class={styles.view}></View>
+                <View class={styles.view}>
+                    
+                </View>
 
                 <TextInput
+                    
                     label="Password"
                     returnKeyType="done"
                     style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10 }}

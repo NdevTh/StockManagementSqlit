@@ -5,10 +5,11 @@ import HomePage from "./screens/HomePage";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import DashBoard from "./screens/DashBoard";
-import ForgortPassWordScreen from "./screens/ForgorPassWordScreen";
+import ForgortPassWordScreen from "./screens/ForgotPassWordScreen";
 const Stack = createNativeStackNavigator();
 import { Provider } from 'react-redux';
 import Store from './store/configStore'
+import CameraScreen from './screens/CameraScreen';
 
 //import { StatusBar } from 'expo-status-bar'; 
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
@@ -24,6 +25,7 @@ const App = () => {
                   />
                   <Stack.Screen name="Loginscreen" component={LoginScreen} />
                   <Stack.Screen name="Registerscreen" component={RegisterScreen} />
+                  <Stack.Screen name="CameraScreen" component={CameraScreen} />
                   <Stack.Screen name="ForgotPasswordscreen" component={ForgortPassWordScreen} />
                   <Stack.Screen name="Dashboard" component={DashBoard} />
               </Stack.Navigator>

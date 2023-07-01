@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomePage from "./screens/HomePage";
-import LoginScreen from "./screens/LoginSreen";
+import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import DashBoard from "./screens/DashBoard";
 import ForgortPassWordScreen from "./screens/ForgorPassWordScreen";

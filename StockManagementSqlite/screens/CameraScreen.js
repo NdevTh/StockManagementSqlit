@@ -1,17 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, TouchableOpacity, Button, Modal, TextInput } from 'react-native';
+import { Text, View, TouchableOpacity, Button, Modal, TextInput, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 
-import { savePhotoToDB } from './Database'; // Ajoutez cette ligne en haut de votre fichier
 
-const savePhoto = async () => {
-  savePhotoToDB(designation, quantity, capturedImage); // Modifier l'appel à savePhotoToDB ici
-  setPreviewVisible(false);
-  setCapturedImage(null);
-  setDesignation("");
-  setQuantity("");
-}
+import { savePhotoToDB } from './Database';
 
 export default function CameraScreen() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -25,8 +18,8 @@ export default function CameraScreen() {
 
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+        const { status } = await Camera.requestCameraPermissionsAsync();
+          setHasPermission(status === 'granted');
     })();
   }, []);
 
@@ -42,8 +35,7 @@ export default function CameraScreen() {
   }
 
   const savePhoto = async () => {
-    // Save your photo with designation and quantity
-    // TODO: save to SQLite
+    savePhotoToDB(designation, quantity, capturedImage);
     setPreviewVisible(false);
     setCapturedImage(null);
     setDesignation("");

@@ -1,8 +1,14 @@
 import React from 'react';
-import {View, Button} from 'react-native';
+import {View, Button, StyleSheet} from 'react-native';
 import CameraScreen from './CameraScreen'
 import Header from '../components/Header';
 import Paragraph from '../components/Paragraph';
+
+const styles = StyleSheet.create({
+    container: {
+        // Ajoutez ici les styles pour votre conteneur
+    },
+});
 
 export default class Dashboard extends React.Component{
     render(){

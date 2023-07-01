@@ -1,21 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
-import * as Sqlite from 'expo-sqlite';
-import { useState, UseEffect } from 'react';
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Bienvenue sur mon app de gestion</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import React, { useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomePage from "./screens/HomePage";
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
+import DashBoard from "./screens/DashBoard";
+import ForgortPassWordScreen from "./screens/ForgotPassWordScreen";
+import CameraScreen from "./screens/CameraScreen";
+import { setupDB } from './screens/Database.js';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const Stack = createNativeStackNavigator();
+
+const App = () => {
+  useEffect(() => {
+    setupDB(); // Appel de la fonction setupDB lors du montage du composant
+  }, []);
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="HomePage" component={HomePage} />
+        <Stack.Screen name="Loginscreen" component={LoginScreen} />
+        <Stack.Screen name="Registerscreen" component={RegisterScreen} />
+        <Stack.Screen name="CameraScreen" component={CameraScreen} />
+        <Stack.Screen name="ForgotPasswordscreen" component={ForgortPassWordScreen} />
+        <Stack.Screen name="Dashboard" component={DashBoard} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;

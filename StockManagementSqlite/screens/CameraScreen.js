@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, TouchableOpacity, Button, Modal, TextInput, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
+import PhotoList from '../components/PhotoList';
 
 
 import { savePhotoToDB } from './Database';

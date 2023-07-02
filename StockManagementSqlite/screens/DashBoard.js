@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import CameraScreen from './CameraScreen';
 import Header from '../components/Header';
 import Paragraph from '../components/Paragraph';
-import PhotoList from '../components/PhotoList';
+
 
 const styles = StyleSheet.create({
   container: {

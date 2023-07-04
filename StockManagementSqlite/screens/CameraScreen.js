@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Camera } from 'expo-camera';
 import { savePhotoToDB } from './Database';
 
@@ -22,6 +22,9 @@ export default class CameraScreen extends Component {
         // Effectuer les actions de validation ou de traitement des saisies
         // Par exemple, vous pouvez enregistrer les valeurs dans la base de données
         // ou effectuer d'autres opérations selon vos besoins.
+
+        // Masquer le clavier
+        Keyboard.dismiss();
 
         // Naviguer vers l'écran PhotoListScreen
         this.props.navigation.navigate('PhotoListScreen');
@@ -49,10 +52,6 @@ export default class CameraScreen extends Component {
         }
     }
 
-    handleScreenPress = () => {
-        this.setState({ designation: '', quantity: 0 });
-    };
-
     render() {
         if (this.state.hasPermission === null) {
             return <View />;
@@ -61,46 +60,47 @@ export default class CameraScreen extends Component {
             return <Text>No access to camera</Text>;
         }
         return (
-            <View style={styles.container} onTouchStart={this.handleScreenPress}>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Désignation"
-                        value={this.state.designation}
-                        onChangeText={(text) => this.setState({ designation: text })}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Quantité"
-                        keyboardType="numeric"
-                        value={this.state.quantity.toString()}
-                        onChangeText={(text) => this.setState({ quantity: parseInt(text) })}
-                    />
-                    <TouchableOpacity style={styles.button} onPress={this.handleValidation}>
-                        <Text style={styles.buttonText}>OK</Text>
-                    </TouchableOpacity>
-                </View>
-                <Camera style={styles.camera} type={this.state.type} ref={ref => { this.camera = ref; }}>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => {
-                                this.setState(prevState => ({
-                                    type: prevState.type === Camera.Constants.Type.back ?
-                                        Camera.Constants.Type.front :
-                                        Camera.Constants.Type.back
-                                }));
-                            }}
-                        >
-                            <Text style={styles.text}> Selfie </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.buttonSnap} onPress={() => this.snap()}>
-                            <Text style={styles.text}> Prendre une photo </Text>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={styles.container}>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Désignation"
+                            value={this.state.designation}
+                            onChangeText={(text) => this.setState({ designation: text })}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Quantité"
+                            keyboardType="numeric"
+                            value={this.state.quantity.toString()}
+                            onChangeText={(text) => this.setState({ quantity: parseInt(text) })}
+                        />
+                        <TouchableOpacity style={styles.button} onPress={this.handleValidation}>
+                            <Text style={styles.buttonText}>OK</Text>
                         </TouchableOpacity>
                     </View>
-                </Camera>
-
-            </View>
+                    <Camera style={styles.camera} type={this.state.type} ref={ref => { this.camera = ref; }}>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => {
+                                    this.setState(prevState => ({
+                                        type: prevState.type === Camera.Constants.Type.back ?
+                                            Camera.Constants.Type.front :
+                                            Camera.Constants.Type.back
+                                    }));
+                                }}
+                            >
+                                <Text style={styles.text}> Selfie </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.buttonSnap} onPress={() => this.snap()}>
+                                <Text style={styles.text}> Prendre une photo </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Camera>
+                </View>
+            </TouchableWithoutFeedback>
         );
     }
 }

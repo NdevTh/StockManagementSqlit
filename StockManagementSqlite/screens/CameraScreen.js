@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, button } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import { savePhotoToDB } from './Database';
-import { useNavigation } from '@react-navigation/native';
-
-
-
 
 export default class CameraScreen extends Component {
     constructor(props) {
@@ -18,24 +14,25 @@ export default class CameraScreen extends Component {
             quantity: 0,
         };
     }
+
     handleValidation = () => {
-      // Récupérer les valeurs saisies
-      const { designation, quantity } = this.state;
-  
-      // Effectuer les actions de validation ou de traitement des saisies
-      // Par exemple, vous pouvez enregistrer les valeurs dans la base de données
-      // ou effectuer d'autres opérations selon vos besoins.
-  
-      // Naviguer vers l'écran PhotoListScreen
-      this.props.navigation.navigate('PhotoListScreen');
-  }
-  
-    async componentDidMount(){
+        // Récupérer les valeurs saisies
+        const { designation, quantity } = this.state;
+
+        // Effectuer les actions de validation ou de traitement des saisies
+        // Par exemple, vous pouvez enregistrer les valeurs dans la base de données
+        // ou effectuer d'autres opérations selon vos besoins.
+
+        // Naviguer vers l'écran PhotoListScreen
+        this.props.navigation.navigate('PhotoListScreen');
+    };
+
+    async componentDidMount() {
         const { status } = await Camera.requestCameraPermissionsAsync();
         this.setState({ hasPermission: status === 'granted' });
     }
 
-    async snap(){
+    async snap() {
         if (this.camera) {
             let photo = await this.camera.takePictureAsync();
             console.log(photo);
@@ -50,8 +47,11 @@ export default class CameraScreen extends Component {
                 }
             });
         }
-        
     }
+
+    handleScreenPress = () => {
+        this.setState({ designation: '', quantity: 0 });
+    };
 
     render() {
         if (this.state.hasPermission === null) {
@@ -61,59 +61,45 @@ export default class CameraScreen extends Component {
             return <Text>No access to camera</Text>;
         }
         return (
-            <View style={styles.container}>
+            <View style={styles.container} onTouchStart={this.handleScreenPress}>
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
                         placeholder="Désignation"
+                        value={this.state.designation}
                         onChangeText={(text) => this.setState({ designation: text })}
                     />
                     <TextInput
                         style={styles.input}
                         placeholder="Quantité"
                         keyboardType="numeric"
+                        value={this.state.quantity.toString()}
                         onChangeText={(text) => this.setState({ quantity: parseInt(text) })}
                     />
-                    <TouchableOpacity
-    style={styles.button}
-    onPress={this.handleValidation}
->
-    <Text style={styles.buttonText}>ok</Text>
-</TouchableOpacity>
-
+                    <TouchableOpacity style={styles.button} onPress={this.handleValidation}>
+                        <Text style={styles.buttonText}>OK</Text>
+                    </TouchableOpacity>
                 </View>
-                <Camera style={styles.camera} type={this.state.type} ref={ref => {
-                    this.camera = ref;
-                }}>
+                <Camera style={styles.camera} type={this.state.type} ref={ref => { this.camera = ref; }}>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
                             style={styles.button}
                             onPress={() => {
-                                this.setState({
-                                    type: this.state.type === Camera.Constants.Type.back
-                                        ? Camera.Constants.Type.front
-                                        : Camera.Constants.Type.back
-                                });
+                                this.setState(prevState => ({
+                                    type: prevState.type === Camera.Constants.Type.back ?
+                                        Camera.Constants.Type.front :
+                                        Camera.Constants.Type.back
+                                }));
                             }}
                         >
-                            <Text style={styles.text}> Selfi </Text>
+                            <Text style={styles.text}> Selfie </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.buttonSnap}
-                            onPress={() => {
-                                this.snap();
-                            }}
-                        >
+                        <TouchableOpacity style={styles.buttonSnap} onPress={() => this.snap()}>
                             <Text style={styles.text}> Prendre une photo </Text>
                         </TouchableOpacity>
                     </View>
                 </Camera>
-                <View style={styles.buttonContainer}>
-                    <Image
-                        style={{ flex: 1 }}
-                        source={{ uri: this.state.uri ? this.state.uri : 'https://reactnative.dev/img/tiny_logo.png' }}
-                    />
-                </View>
+
             </View>
         );
     }
@@ -160,4 +146,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginRight: 10,
     },
+    image: {
+        flex: 1,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
+    }
 });

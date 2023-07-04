@@ -59,7 +59,6 @@ export default class CameraScreen extends React.Component {
                     keyboardType="numeric"
                     onChangeText={(text) => this.setState({quantity: parseInt(text)})}
                 />
-                <button></button>
             </View>
                 <Camera style={styles.camera} type={this.state.type} ref={ref => {
                     this.camera = ref;

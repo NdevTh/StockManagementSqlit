@@ -1,46 +1,61 @@
-import React, { memo } from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, button } from 'react-native';
 import { Camera } from 'expo-camera';
 import { savePhotoToDB } from './Database';
+import { useNavigation } from '@react-navigation/native';
 
 
-export default class CameraScreen extends React.Component {
+
+
+export default class CameraScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
             hasPermission: null,
             type: Camera.Constants.Type.back,
             uri: null,
-            designation :'',
-            quantity :0,
+            designation: '',
+            quantity: 0,
         };
     }
-
+    handleValidation = () => {
+      // Récupérer les valeurs saisies
+      const { designation, quantity } = this.state;
+  
+      // Effectuer les actions de validation ou de traitement des saisies
+      // Par exemple, vous pouvez enregistrer les valeurs dans la base de données
+      // ou effectuer d'autres opérations selon vos besoins.
+  
+      // Naviguer vers l'écran PhotoListScreen
+      this.props.navigation.navigate('PhotoListScreen');
+  }
+  
     async componentDidMount(){
-        const {status} = await Camera.requestCameraPermissionsAsync();
-        this.setState({hasPermission: status === 'granted'});
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        this.setState({ hasPermission: status === 'granted' });
     }
 
     async snap(){
-      if (this.camera) {
-          let photo = await this.camera.takePictureAsync();
-          console.log(photo)
-          this.setState({uri: photo.uri})
-          // Enregistrer la photo dans la base de données
-          savePhotoToDB(photo.uri, (success) => {
-              if (success) {
-                  this.props.navigation.navigate('PhotoListScreen');
-              } else {
-                  console.log('Erreur d\'enregistrement de la photo');
-              }
-          });
-      }
-  }
+        if (this.camera) {
+            let photo = await this.camera.takePictureAsync();
+            console.log(photo);
+            this.setState({ uri: photo.uri });
 
+            // Enregistrer la photo dans la base de données
+            savePhotoToDB(this.state.designation, this.state.quantity, photo.uri, (success) => {
+                if (success) {
+                    this.props.navigation.navigate('PhotoListScreen');
+                } else {
+                    console.log('Erreur d\'enregistrement de la photo');
+                }
+            });
+        }
+        
+    }
 
     render() {
         if (this.state.hasPermission === null) {
-            return <View/>;
+            return <View />;
         }
         if (this.state.hasPermission === false) {
             return <Text>No access to camera</Text>;
@@ -48,18 +63,25 @@ export default class CameraScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Désignation"
-                    onChangeText={(text) => this.setState({designation: text})}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Quantité"
-                    keyboardType="numeric"
-                    onChangeText={(text) => this.setState({quantity: parseInt(text)})}
-                />
-            </View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Désignation"
+                        onChangeText={(text) => this.setState({ designation: text })}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Quantité"
+                        keyboardType="numeric"
+                        onChangeText={(text) => this.setState({ quantity: parseInt(text) })}
+                    />
+                    <TouchableOpacity
+    style={styles.button}
+    onPress={this.handleValidation}
+>
+    <Text style={styles.buttonText}>ok</Text>
+</TouchableOpacity>
+
+                </View>
                 <Camera style={styles.camera} type={this.state.type} ref={ref => {
                     this.camera = ref;
                 }}>
@@ -67,31 +89,36 @@ export default class CameraScreen extends React.Component {
                         <TouchableOpacity
                             style={styles.button}
                             onPress={() => {
-                                this.setState({type:
-                                    this.state.type === Camera.Constants.Type.back
+                                this.setState({
+                                    type: this.state.type === Camera.Constants.Type.back
                                         ? Camera.Constants.Type.front
                                         : Camera.Constants.Type.back
                                 });
-                            }}>
+                            }}
+                        >
                             <Text style={styles.text}> Selfi </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.buttonSnap}
                             onPress={() => {
-                                this.snap()
-                            }}>
-                            <Text style={styles.text}> Prnedre une photo </Text>
+                                this.snap();
+                            }}
+                        >
+                            <Text style={styles.text}> Prendre une photo </Text>
                         </TouchableOpacity>
                     </View>
                 </Camera>
                 <View style={styles.buttonContainer}>
-                    <Image style={{flex: 1}} source={{uri: this.state.uri ? this.state.uri : 'https://reactnative.dev/img/tiny_logo.png'}}/>
+                    <Image
+                        style={{ flex: 1 }}
+                        source={{ uri: this.state.uri ? this.state.uri : 'https://reactnative.dev/img/tiny_logo.png' }}
+                    />
                 </View>
             </View>
         );
-
     }
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -122,16 +149,15 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     inputContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: 20,
-  },
-  input: {
-      flex: 1,
-      height: 40,
-      borderColor: 'gray',
-      borderWidth: 1,
-      marginRight: 10,
-  },
-
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+    },
+    input: {
+        flex: 1,
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginRight: 10,
+    },
 });

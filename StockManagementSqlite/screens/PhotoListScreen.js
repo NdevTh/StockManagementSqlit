@@ -10,6 +10,17 @@ export default class PhotoListScreen extends React.Component {
         };
     }
 
+    renderItem = ({ item }) => {
+        return (
+          <View style={styles.container}>
+            <Text>{item.designation}</Text>
+            <Text>{item.quantity}</Text>
+            <Image source={{ uri: item.image }} style={styles.image} />
+          </View>
+        );
+      };
+      
+
     componentDidMount() {
         retrievePhotosFromDB((photos) => {
             this.setState({ photos: photos });
@@ -47,4 +58,5 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
     }
+    
 });

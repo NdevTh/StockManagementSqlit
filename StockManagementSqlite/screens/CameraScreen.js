@@ -1,6 +1,8 @@
 import React, { memo } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, button } from 'react-native';
 import { Camera } from 'expo-camera';
+import { savePhotoToDB } from './Database';
+
 
 export default class CameraScreen extends React.Component {
     constructor(props) {
@@ -8,25 +10,33 @@ export default class CameraScreen extends React.Component {
         this.state = {
             hasPermission: null,
             type: Camera.Constants.Type.back,
-            uri: null
+            uri: null,
+            designation :'',
+            quantity :0,
         };
     }
-    componentDidMount(){
-        this.useEffect()
-    }
 
-    async useEffect(){
+    async componentDidMount(){
         const {status} = await Camera.requestCameraPermissionsAsync();
         this.setState({hasPermission: status === 'granted'});
     }
 
     async snap(){
-        if (this.camera) {
-            let photo = await this.camera.takePictureAsync();
-            console.log(photo)
-            this.setState({uri: photo.uri})
-        }
-    }
+      if (this.camera) {
+          let photo = await this.camera.takePictureAsync();
+          console.log(photo)
+          this.setState({uri: photo.uri})
+          // Enregistrer la photo dans la base de données
+          savePhotoToDB(photo.uri, (success) => {
+              if (success) {
+                  this.props.navigation.navigate('PhotoListScreen');
+              } else {
+                  console.log('Erreur d\'enregistrement de la photo');
+              }
+          });
+      }
+  }
+
 
     render() {
         if (this.state.hasPermission === null) {
@@ -37,6 +47,20 @@ export default class CameraScreen extends React.Component {
         }
         return (
             <View style={styles.container}>
+                <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Désignation"
+                    onChangeText={(text) => this.setState({designation: text})}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Quantité"
+                    keyboardType="numeric"
+                    onChangeText={(text) => this.setState({quantity: parseInt(text)})}
+                />
+                <button></button>
+            </View>
                 <Camera style={styles.camera} type={this.state.type} ref={ref => {
                     this.camera = ref;
                 }}>
@@ -50,14 +74,14 @@ export default class CameraScreen extends React.Component {
                                         : Camera.Constants.Type.back
                                 });
                             }}>
-                            <Text style={styles.text}> Flip </Text>
+                            <Text style={styles.text}> Selfi </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.buttonSnap}
                             onPress={() => {
                                 this.snap()
                             }}>
-                            <Text style={styles.text}> Take photo </Text>
+                            <Text style={styles.text}> Prnedre une photo </Text>
                         </TouchableOpacity>
                     </View>
                 </Camera>
@@ -98,4 +122,17 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'white',
     },
+    inputContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 20,
+  },
+  input: {
+      flex: 1,
+      height: 40,
+      borderColor: 'gray',
+      borderWidth: 1,
+      marginRight: 10,
+  },
+
 });

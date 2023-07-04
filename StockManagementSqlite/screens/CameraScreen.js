@@ -1,112 +1,101 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, TouchableOpacity, Button, Modal, TextInput, Image } from 'react-native';
+import React, { memo } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
-import * as ImagePicker from 'expo-image-picker';
-import PhotoList from '../components/PhotoList';
 
-
-import { savePhotoToDB } from './Database';
-
-export default function CameraScreen() {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [capturedImage, setCapturedImage] = useState(null);
-  const [designation, setDesignation] = useState("");
-  const [quantity, setQuantity] = useState("");
-
-  const cameraRef = useRef(null);
-
-  useEffect(() => {
-    (async () => {
-        const { status } = await Camera.requestCameraPermissionsAsync();
-          setHasPermission(status === 'granted');
-    })();
-  }, []);
-
-  const takePicture = async () => {
-    if (cameraRef.current) {
-      const options = { quality: 0.5, base64: true };
-      const data = await cameraRef.current.takePictureAsync(options);
-      const base64Image = data.base64;
-      
-      setPreviewVisible(true);
-      setCapturedImage(base64Image);
+export default class CameraScreen extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            hasPermission: null,
+            type: Camera.Constants.Type.back,
+            uri: null
+        };
     }
-  }
+    componentDidMount(){
+        this.useEffect()
+    }
 
-  const savePhoto = async () => {
-    savePhotoToDB(designation, quantity, capturedImage);
-    setPreviewVisible(false);
-    setCapturedImage(null);
-    setDesignation("");
-    setQuantity("");
-  }
+    async useEffect(){
+        const {status} = await Camera.requestCameraPermissionsAsync();
+        this.setState({hasPermission: status === 'granted'});
+    }
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
-  return (
-    <View style={{ flex: 1 }}>
-      <Camera style={{ flex: 1 }} type={type} ref={cameraRef}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: 'transparent',
-            flexDirection: 'row',
-          }}>
-          <TouchableOpacity
-            style={{
-              flex: 0.1,
-              alignSelf: 'flex-end',
-              alignItems: 'center',
-            }}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              flex: 0.1,
-              alignSelf: 'flex-end',
-              alignItems: 'center',
-            }}
-            onPress={takePicture}>
-            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Take Picture </Text>
-          </TouchableOpacity>
-        </View>
-      </Camera>
+    async snap(){
+        if (this.camera) {
+            let photo = await this.camera.takePictureAsync();
+            console.log(photo)
+            this.setState({uri: photo.uri})
+        }
+    }
 
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={previewVisible}
-      >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Image style={{ flex: 1 }} source={{ uri: `data:image/gif;base64,${capturedImage}` }} />
-          <TextInput 
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-            onChangeText={text => setDesignation(text)}
-            value={designation}
-            placeholder="Designation"
-          />
-          <TextInput 
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-            onChangeText={text => setQuantity(text)}
-            value={quantity}
-            placeholder="Quantity"
-          />
-          <Button title="Save" onPress={savePhoto} />
-        </View>
-      </Modal>
-    </View>
-  );
+    render() {
+        if (this.state.hasPermission === null) {
+            return <View/>;
+        }
+        if (this.state.hasPermission === false) {
+            return <Text>No access to camera</Text>;
+        }
+        return (
+            <View style={styles.container}>
+                <Camera style={styles.camera} type={this.state.type} ref={ref => {
+                    this.camera = ref;
+                }}>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => {
+                                this.setState({type:
+                                    this.state.type === Camera.Constants.Type.back
+                                        ? Camera.Constants.Type.front
+                                        : Camera.Constants.Type.back
+                                });
+                            }}>
+                            <Text style={styles.text}> Flip </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.buttonSnap}
+                            onPress={() => {
+                                this.snap()
+                            }}>
+                            <Text style={styles.text}> Take photo </Text>
+                        </TouchableOpacity>
+                    </View>
+                </Camera>
+                <View style={styles.buttonContainer}>
+                    <Image style={{flex: 1}} source={{uri: this.state.uri ? this.state.uri : 'https://reactnative.dev/img/tiny_logo.png'}}/>
+                </View>
+            </View>
+        );
+
+    }
 }
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexDirection: 'column'
+    },
+    camera: {
+        flex: 1,
+    },
+    buttonContainer: {
+        flex: 1,
+        backgroundColor: 'transparent',
+        flexDirection: 'row',
+        margin: 20,
+    },
+    button: {
+        flex: 0.1,
+        alignSelf: 'flex-end',
+        alignItems: 'center',
+    },
+    buttonSnap: {
+        marginTop: 20,
+        flex: 0.3,
+        alignSelf: 'flex-start',
+        alignItems: 'center',
+    },
+    text: {
+        fontSize: 18,
+        color: 'white',
+    },
+});

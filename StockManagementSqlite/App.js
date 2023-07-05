@@ -10,6 +10,7 @@ import CameraScreen from "./screens/CameraScreen";
 import { setupDB } from './screens/Database.js';
 import PhotoListScreen from './screens/PhotoListScreen';
 import PhotoModif from './screens/PhotoModif';
+import ResultSearch from './screens/ResultSearch';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ const App = () => {
         <Stack.Screen name="Dashboard" component={DashBoard} />
         <Stack.Screen name="PhotoListScreen" component={PhotoListScreen} />
         <Stack.Screen name="PhotoModif" component={PhotoModif} />
+        <Stack.Screen name="ResultSearch" component={ResultSearch} />
       </Stack.Navigator>
     </NavigationContainer>
   );

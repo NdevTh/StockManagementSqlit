@@ -8,62 +8,59 @@ const PhotoListScreen = ({ navigation }) => {
   const [filteredPhotos, setFilteredPhotos] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', fetchPhotos);
+    const fetchPhotos = async () => {
+      const fetchedPhotos = await retrievePhotosFromDB();
+      setPhotos(fetchedPhotos);
+      setFilteredPhotos(fetchedPhotos);
+    };
 
-    // Nettoyage de l'écouteur lors du démontage du composant
+    const unsubscribe = navigation.addListener('focus', fetchPhotos);
     return unsubscribe;
   }, [navigation]);
 
   useEffect(() => {
-    // Effectuer la recherche à chaque fois que le texte de recherche change
+    const performSearch = () => {
+      const filtered = photos.filter((photo) => {
+        const designation = photo.designation.toLowerCase();
+        const searchTextLower = searchText.toLowerCase();
+        return designation.includes(searchTextLower);
+      });
+      setFilteredPhotos(filtered);
+    };
+
     performSearch();
-  }, [searchText]);
+  }, [photos, searchText]);
 
-  const fetchPhotos = () => {
-    retrievePhotosFromDB((photos) => {
-      setPhotos(photos);
-      setFilteredPhotos(photos);
-    });
+  const deletePhoto = async (id) => {
+    const success = await deletePhotoFromDB(id);
+    if (success) {
+      const fetchedPhotos = await retrievePhotosFromDB();
+      setPhotos(fetchedPhotos);
+      setFilteredPhotos(fetchedPhotos);
+    } else {
+      console.log('Erreur de suppression de la photo');
+    }
   };
 
-  const deletePhoto = (id) => {
-    deletePhotoFromDB(id, (success) => {
-      if (success) {
-        fetchPhotos();
-      } else {
-        console.log('Erreur de suppression de la photo');
-      }
-    });
-  };
-
-  const performSearch = () => {
-    const filtered = photos.filter((photo) => {
-      const designation = photo.designation.toLowerCase();
-      const searchTextLower = searchText.toLowerCase();
-      return designation.includes(searchTextLower);
-    });
-    setFilteredPhotos(filtered);
-  };
-
-  const renderItem = ({ item }) => {
-    return (
-      <View style={styles.container}>
-        <Text>{item.designation}</Text>
-        <Text>{item.quantity}</Text>
-        <Image source={{ uri: item.image }} style={styles.image} />
-        <TouchableOpacity
-          style={styles.deleteButton}
-          onPress={() => deletePhoto(item.id)}>
-          <Text style={styles.deleteButtonText}>Supprimer</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.modifButton}
-          onPress={() => navigation.navigate('PhotoModif', { photoId: item.id })}>
-          <Text style={styles.deleteButtonText}>Modifier</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  const renderItem = ({ item }) => (
+    <View style={styles.container}>
+      <Text>{item.designation}</Text>
+      <Text>{item.quantity}</Text>
+      <Image source={{ uri: item.image }} style={styles.image} />
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => deletePhoto(item.id)}
+      >
+        <Text style={styles.deleteButtonText}>Supprimer</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.modifButton}
+        onPress={() => navigation.navigate('PhotoModif', { photoId: item.id })}
+      >
+        <Text style={styles.deleteButtonText}>Modifier</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <View>
@@ -74,7 +71,7 @@ const PhotoListScreen = ({ navigation }) => {
           value={searchText}
           onChangeText={setSearchText}
         />
-        <Button title="OK" onPress={performSearch} />
+        <Button title="OK" onPress={() => {}} />
       </View>
       <FlatList
         data={filteredPhotos}
@@ -116,14 +113,14 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    margin: 10,
+    marginBottom: 10,
   },
   searchInput: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor:'#ccc',
     marginRight: 10,
-    paddingHorizontal: 10,
+    padding: 5,
   },
 });
 

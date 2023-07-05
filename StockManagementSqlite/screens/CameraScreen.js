@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity,  Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Camera } from 'expo-camera';
 import { savePhotoToDB } from './Database';
 
@@ -12,7 +12,7 @@ export default class CameraScreen extends Component {
             uri: null,
             designation: '',
             quantity: 0,
-            Date:null,
+            
         };
     }
 
@@ -82,12 +82,12 @@ export default class CameraScreen extends Component {
                                 }}
                         />
                         <TextInput
-                            style={styles.input}
-                            placeholder="Dateline"
-                            keyboardType="numeric"
-                            value={this.state.designation}
-                            onChangeText={(text) => this.setState({ designation: text })}
+                                style={styles.input}
+                                placeholder="date"
+                                keyboardType="numeric"
+                             
                         />
+                    
 
                     </View>
                     <Camera style={styles.camera} type={this.state.type} ref={ref => { this.camera = ref; }}>

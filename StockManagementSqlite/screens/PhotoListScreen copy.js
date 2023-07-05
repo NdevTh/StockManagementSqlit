@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { retrievePhotosFromDB, deletePhotoFromDB, modifPhotoFromDB } from './Database.js';
+import { retrievePhotosFromDB, deletePhotoFromDB } from './Database.js';
 
 export default class PhotoListScreen extends React.Component {
     constructor(props) {
@@ -29,15 +29,6 @@ export default class PhotoListScreen extends React.Component {
             }
         });
     };
-    modifPhoto = (id) => {
-        modifPhotoFromDB(id, (success) => {
-            if (success) {
-                this.fetchPhotos();
-            } else {
-                console.log('Erreur de suppression de la photo');
-            }
-        });
-    };
 
     renderItem = ({ item }) => {
         return (
@@ -47,13 +38,9 @@ export default class PhotoListScreen extends React.Component {
                 <Image source={{ uri: item.image }} style={styles.image} />
                 <TouchableOpacity
                     style={styles.deleteButton}
-                    onPress={() => this.deletePhoto(item.id)}>
+                    onPress={() => this.deletePhoto(item.id)}
+                >
                     <Text style={styles.deleteButtonText}>Supprimer</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.modifButton}
-                    onPress={() => this.deletePhoto(item.id)}>
-                    <Text style={styles.deleteButtonText}>Modifier</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -86,16 +73,6 @@ const styles = StyleSheet.create({
     },
     deleteButton: {
         backgroundColor: 'red',
-        padding: 10,
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    deleteButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    modifButton: {
-        backgroundColor: 'blue',
         padding: 10,
         alignItems: 'center',
         marginTop: 10,

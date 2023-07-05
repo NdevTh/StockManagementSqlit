@@ -24,14 +24,13 @@ export default function Dashboard(props) {
   console.log(props);
   return (
     <View>
-      <Header title="Vous êtes connectés" />
+      <Header title="Vous êtes connecté" />
       <Paragraph>Bienvenue {props.route.params.username}</Paragraph>
       <Paragraph>Commencer à prendre une photo</Paragraph>
-
-
-
+  
       <Button onPress={goToCameraScreen} title="Prendre une photo" />
 
+      <Button onPress={() => navigation.navigate('PhotoListScreen')} title="Afficher les photos" />
       <Button onPress={() => navigation.navigate('HomePage')} title="Déconnexion" />
     </View>
   );

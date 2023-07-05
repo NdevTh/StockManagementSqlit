@@ -64,16 +64,14 @@ class LoginScreen extends React.Component {
                 <Header title="Connexion"/>
 
                 <InputText
-        
+                    placeholder='email'
                     value={this.state.email}
                     toto={text => this.setState({ email: text })}
                 />
-                <View class={styles.view}>
-                    
-                </View>
+               
 
                 <TextInput
-                    
+                    placeholder='Mot de passe'
                     label="Password"
                     returnKeyType="done"
                     style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10 }}

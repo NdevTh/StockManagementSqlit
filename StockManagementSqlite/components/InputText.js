@@ -19,6 +19,7 @@ class InputText extends React.Component{
                     style={{ height: 40, borderColor: 'gray', borderWidth: 1, margin: 10 }}
                     value={maValue}
                     onChangeText={toto}
+                placeholder={this.props.placeholder}
                 />
             </View>
         )

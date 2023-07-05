@@ -12,6 +12,7 @@ export default class CameraScreen extends Component {
             uri: null,
             designation: '',
             quantity: 0,
+            Date:null,
         };
     }
 
@@ -65,21 +66,28 @@ export default class CameraScreen extends Component {
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            placeholder="Désignation"
+                            placeholder="Nom"
                             value={this.state.designation}
                             onChangeText={(text) => this.setState({ designation: text })}
                         />
-                     <TextInput
-  style={styles.input}
-  placeholder="Quantité"
-  keyboardType="numeric"
-  value={this.state.quantity ? this.state.quantity.toString() : ''}
-  onChangeText={(text) => {
-    const quantity = text !== '' ? parseInt(text) : '';
-    this.setState({ quantity });
-  }}
-/>
-
+                       
+                        <TextInput
+                                style={styles.input}
+                                placeholder="Quantité"
+                                keyboardType="numeric"
+                                value={this.state.quantity ? this.state.quantity.toString() : ''}
+                                onChangeText={(text) => {
+                                    const quantity = text !== '' ? parseInt(text) : '';
+                                    this.setState({ quantity });
+                                }}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Dateline"
+                            keyboardType="numeric"
+                            value={this.state.designation}
+                            onChangeText={(text) => this.setState({ designation: text })}
+                        />
 
                     </View>
                     <Camera style={styles.camera} type={this.state.type} ref={ref => { this.camera = ref; }}>

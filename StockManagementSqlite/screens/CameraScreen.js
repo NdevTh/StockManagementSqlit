@@ -69,16 +69,18 @@ export default class CameraScreen extends Component {
                             value={this.state.designation}
                             onChangeText={(text) => this.setState({ designation: text })}
                         />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Quantité"
-                            keyboardType="numeric"
-                            value={this.state.quantity.toString()}
-                            onChangeText={(text) => this.setState({ quantity: parseInt(text) })}
-                        />
-                        <TouchableOpacity style={styles.button} onPress={this.handleValidation}>
-                            <Text style={styles.buttonText}>OK</Text>
-                        </TouchableOpacity>
+                     <TextInput
+  style={styles.input}
+  placeholder="Quantité"
+  keyboardType="numeric"
+  value={this.state.quantity ? this.state.quantity.toString() : ''}
+  onChangeText={(text) => {
+    const quantity = text !== '' ? parseInt(text) : '';
+    this.setState({ quantity });
+  }}
+/>
+
+
                     </View>
                     <Camera style={styles.camera} type={this.state.type} ref={ref => { this.camera = ref; }}>
                         <View style={styles.buttonContainer}>

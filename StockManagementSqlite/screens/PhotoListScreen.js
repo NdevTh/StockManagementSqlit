@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { retrievePhotosFromDB, deletePhotoFromDB, modifPhotoFromDB } from './Database.js';
+import { retrievePhotosFromDB, deletePhotoFromDB } from './Database.js';
 
 export default class PhotoListScreen extends React.Component {
     constructor(props) {
@@ -10,9 +10,14 @@ export default class PhotoListScreen extends React.Component {
         };
     }
 
+    // Méthode appelée lorsque le composant est monté ou lorsqu'il reçoit le focus
     componentDidMount() {
+        // Ajout d'un écouteur de focus pour appeler fetchPhotos à chaque fois que le composant reçoit le focus
+        this.props.navigation.addListener('focus', this.fetchPhotos);
         this.fetchPhotos();
     }
+
+
 
     fetchPhotos = () => {
         retrievePhotosFromDB((photos) => {
@@ -22,15 +27,6 @@ export default class PhotoListScreen extends React.Component {
 
     deletePhoto = (id) => {
         deletePhotoFromDB(id, (success) => {
-            if (success) {
-                this.fetchPhotos();
-            } else {
-                console.log('Erreur de suppression de la photo');
-            }
-        });
-    };
-    modifPhoto = (id) => {
-        modifPhotoFromDB(id, (success) => {
             if (success) {
                 this.fetchPhotos();
             } else {
@@ -52,7 +48,7 @@ export default class PhotoListScreen extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.modifButton}
-                    onPress={() => this.deletePhoto(item.id)}>
+                    onPress={() => this.props.navigation.navigate('PhotoModif', { photoId: item.id })}>
                     <Text style={styles.deleteButtonText}>Modifier</Text>
                 </TouchableOpacity>
             </View>
@@ -99,9 +95,5 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: 'center',
         marginTop: 10,
-    },
-    deleteButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
     },
 });

@@ -9,6 +9,7 @@ import ForgortPassWordScreen from "./screens/ForgotPassWordScreen";
 import CameraScreen from "./screens/CameraScreen";
 import { setupDB } from './screens/Database.js';
 import PhotoListScreen from './screens/PhotoListScreen';
+import PhotoModif from './screens/PhotoModif';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,7 @@ const App = () => {
         <Stack.Screen name="ForgotPasswordscreen" component={ForgortPassWordScreen} />
         <Stack.Screen name="Dashboard" component={DashBoard} />
         <Stack.Screen name="PhotoListScreen" component={PhotoListScreen} />
+        <Stack.Screen name="PhotoModif" component={PhotoModif} />
       </Stack.Navigator>
     </NavigationContainer>
   );

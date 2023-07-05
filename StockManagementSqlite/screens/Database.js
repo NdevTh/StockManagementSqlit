@@ -35,21 +35,26 @@ export const savePhotoToDB = (designation, quantity, image, callback) => {
 };
 
 export const retrievePhotosFromDB = (callback) => {
-    db.transaction(tx => {
-        tx.executeSql(
-            "SELECT * FROM photos;",
-            [],
-            (_, { rows }) => {
-                const photos = rows._array;
-                callback(photos);
-            },
-            (_, error) => {
-                console.log(error);
-                callback([]);
-            }
-        );
+    db.transaction((tx) => {
+      tx.executeSql(
+        "SELECT * FROM photos;",
+        [],
+        (_, result) => {
+          const rows = result.rows;
+          const photos = [];
+          for (let i = 0; i < rows.length; i++) {
+            photos.push(rows.item(i));
+          }
+          callback(photos);
+        },
+        (_, error) => {
+          console.log(error);
+          callback([]);
+        }
+      );
     });
-};
+  };
+  
 
 export const deletePhotoFromDB = (id, callback) => {
     db.transaction(tx => {

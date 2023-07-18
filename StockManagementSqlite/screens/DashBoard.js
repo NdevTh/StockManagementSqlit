@@ -23,7 +23,7 @@ export default function Dashboard(props) {
   console.log(props);
   return (
     <View>
-      <Header title="Vous êtes connecté" />
+      <Header title="Vous êtes connectés" />
       <Paragraph>Bienvenue {props.route.params.username}</Paragraph>
       <Paragraph>Commencer à prendre une photo</Paragraph>
   

@@ -16,7 +16,7 @@ export const setupDB = () => {
 export const savePhotoToDB = (designation, quantity, image, callback) => {
     db.transaction(tx => {
         tx.executeSql(
-            "INSERT INTO photos (designation, quantity, image) VALUES (?, ?, ?);",
+            "INSERT INTO photos (designation, quantity, date) VALUES (?, ?, ?);",
             [designation, quantity, image],
             (_, result) => {
                 const insertId = result.insertId;

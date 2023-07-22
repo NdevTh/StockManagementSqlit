@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     buttonText: {
-        color: 'red',
+        color: 'blue',
         fontSize: 18,
     }
 });

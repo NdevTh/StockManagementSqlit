@@ -60,8 +60,7 @@ const PhotoListScreen = ({ navigation }) => {
           style={styles.modifButton}
           onPress={() => navigation.navigate('PhotoModif', { photoId: item.id })}>
           <Text style={styles.deleteButtonText}>Modifier</Text>
-          // ajouter ? 
-          <Text style={styles.deleteButtonText}>Ajouter des images</Text>
+          
         </TouchableOpacity>
       </View>
     );

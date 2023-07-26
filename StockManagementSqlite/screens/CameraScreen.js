@@ -105,7 +105,7 @@ export default class CameraScreen extends Component {
                                 <Text style={styles.text}> Selfie </Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.buttonSnap} onPress={() => this.snap()}>
-                                <Text style={styles.text}> Prenez une photo</Text>
+                                <Text style={styles.text}> Prendre une photo </Text>
                             </TouchableOpacity>
                         </View>
                     </Camera>
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     buttonText: {
-        color: 'blue',
+        color: 'white',
         fontSize: 18,
     }
 });

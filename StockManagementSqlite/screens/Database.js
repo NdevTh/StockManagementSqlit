@@ -5,7 +5,7 @@ const db = SQLite.openDatabase('database.db');
 export const setupDB = () => {
     db.transaction(tx => {
         tx.executeSql(
-            "CREATE TABLE IF NOT EXISTS photos (id INTEGER PRIMARY KEY AUTOINCREMENT, designation TEXT, quantity INTEGER, date TIME);",
+            "CREATE TABLE IF NOT EXISTS photos (id INTEGER PRIMARY KEY AUTOINCREMENT, designation TEXT, quantity INTEGER, image TEXT);",
             [],
             null,
             (_, error) => console.log(error)
@@ -16,7 +16,7 @@ export const setupDB = () => {
 export const savePhotoToDB = (designation, quantity, image, callback) => {
     db.transaction(tx => {
         tx.executeSql(
-            "INSERT INTO photos (designation, quantity, date) VALUES (?, ?, ?);",
+            "INSERT INTO photos (designation, quantity, image) VALUES (?, ?, ?);",
             [designation, quantity, image],
             (_, result) => {
                 const insertId = result.insertId;

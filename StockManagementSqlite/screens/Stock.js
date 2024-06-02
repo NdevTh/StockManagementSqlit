@@ -37,3 +37,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    title: {
+      fontSize: 24,
+      marginBottom: 20,
+    },
+    count: {
+      marginTop: 20,
+      fontSize: 18,
+    },
+  });
+  

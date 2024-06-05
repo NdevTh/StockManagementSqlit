@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     }
     scroll: {
-        color : 'blue';
-        
+        color : 'blue',
+
     }
 });
